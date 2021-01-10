@@ -9,6 +9,7 @@ extern crate kernel32;
 
 extern crate winapi;
 
+extern crate dunce;
 
 include!(concat!(env!("OUT_DIR"), "/version.rs"));
 
@@ -44,6 +45,8 @@ use log::*;
 
 #[cfg(not(test))]
 use clap::{Arg, App, SubCommand, ArgMatches};
+
+use dunce::canonicalize;
 
 #[cfg(not(test))]
 fn build_version() -> String {
@@ -159,7 +162,7 @@ fn do_run(matches: &ArgMatches) {
     }
 
     {
-        let key_dir_abspath = key_dir_path.canonicalize().unwrap();
+        let key_dir_abspath = canonicalize(&key_dir_path).unwrap();
         info!("key_dir_abspath = {:?}", key_dir_abspath);
 
         info!("Attempting to bind to port {:}", port);
